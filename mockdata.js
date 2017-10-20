@@ -162,5 +162,11 @@ const col3 = [
 ];
 
 // generate a random username
-export const getRandomUserName = () =>
+const getRandomUsername = () =>
   `${_.sample(col1)}_${_.sample(col2)}_${_.sample(col3)}`;
+
+const randomUsername = getRandomUsername();
+
+module.exports = {
+  randomUsername
+};
