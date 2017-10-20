@@ -1,6 +1,6 @@
-var _ = require("lodash");
+const _ = require("lodash");
 
-const col1 = [
+const firstWord = [
   "artless",
   "bawdy",
   "beslubbering",
@@ -53,7 +53,7 @@ const col1 = [
   "yeasty"
 ];
 
-const col2 = [
+const secondWord = [
   "base-court",
   "bat-fowling",
   "beef-witted",
@@ -106,7 +106,7 @@ const col2 = [
   "weather-bitten"
 ];
 
-const col3 = [
+const thirdWord = [
   "apple-john",
   "baggage",
   "barnacle",
@@ -159,12 +159,16 @@ const col3 = [
   "wagtail"
 ];
 
-// generate a random username
-const getRandomUsername = () =>
-  `${_.sample(col1)}_${_.sample(col2)}_${_.sample(col3)}`;
-
-const randomUsername = getRandomUsername();
+/**
+ * generate a random username based on insulting Shakespearean words
+ * @returns dash delimited Shakesearean insult suitable for user names
+ */
+function getRandomUsername() {
+  return `${_.sample(firstWord)}-${_.sample(secondWord)}-${_.sample(
+    thirdWord
+  )}`;
+}
 
 module.exports = {
-  randomUsername
+  getRandomUsername
 };

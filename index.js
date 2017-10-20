@@ -1,7 +1,8 @@
-var app = require("express")();
-var http = require("http").Server(app);
-var io = require("socket.io")(http);
-var port = process.env.PORT || 3000;
+const app = require("express")();
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+const port = process.env.PORT || 3000;
+const { getRandomUsername } = require("./randomUsername.js");
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
@@ -16,6 +17,7 @@ const allTheMessages = [];
 
 // io.emit broadcasts to all including sender
 io.on("connection", function(socket) {
+  console.log(getRandomUsername());
   // When a new socket connection is established,
   // replay all of the past messages
   allTheMessages.forEach((msg, idx) => {
