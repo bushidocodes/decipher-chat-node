@@ -1,11 +1,7 @@
 $(function() {
   var socket = io();
   $("form").submit(function() {
-    // $('#m').val()
-    // { nickname: string,
-    // message: text }
     const messageObject = {
-      nickname: "Karina Keen",
       message: $("#m").val()
     };
     socket.emit("chat message", messageObject);
@@ -14,14 +10,7 @@ $(function() {
   });
   socket.on("chat message", function(msg) {
     $("#messages").append(
-      $("<li>").text(`${msg.socketid} ${msg.message} ${msg.timestamp}`)
-    );
-    console.log("msg", msg);
-    window.scrollTo(0, document.body.scrollHeight);
-  });
-  socket.on("new user", function(socketid) {
-    $("#messages").append(
-      $("<li>").text(`A new user ${socketid} has joined the chat`)
+      $("<li>").text(`${msg.nickname} ${msg.message} ${msg.timestamp}`)
     );
     window.scrollTo(0, document.body.scrollHeight);
   });

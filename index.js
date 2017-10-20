@@ -14,30 +14,44 @@ app.get("/client.js", function(req, res) {
 
 // In-memory data structure persisting all messages
 const allTheMessages = [];
+const socketsToNames = {};
 
 // io.emit broadcasts to all including sender
 io.on("connection", function(socket) {
-  console.log(getRandomUsername());
-  // When a new socket connection is established,
-  // replay all of the past messages
-  allTheMessages.forEach((msg, idx) => {
-    console.log(`Attempting to send message #${idx} to ${socket.id}`);
+  socketsToNames[socket.id] = getRandomUsername();
+  // When a new socket connection is established, replay all of the past messages
+  allTheMessages.forEach(msg => {
     socket.emit("chat message", msg);
   });
 
-  io.emit("new user", socket.id);
+  saveAndSendMessage("", `${socketsToNames[socket.id]} has joined the chat`);
 
   // Something here sending past messages to a new user
   socket.on("chat message", function(msg) {
-    // Add timestamp
-    msg.timestamp = JSON.stringify(Date.now());
-    msg.socketid = socket.id;
-    // console.log("New Message: ", msg);
+    saveAndSendMessage(socketsToNames[socket.id], msg.message);
+  });
+
+  socket.on("set name", function(name) {
+    const oldName = socketsToNames[socket.id];
+    socketsToNames[socket.id] = name;
+    saveAndSendMessage("", `${oldName} is now ${socketsToNames[socket.id]}`);
+  });
+
+  socket.on("disconnect", () => {
+    saveAndSendMessage("", `${socketsToNames[socket.id]} has left the chat`);
+  });
+
+  function saveAndSendMessage(
+    nickname,
+    message,
+    timestamp = JSON.stringify(Date.now())
+  ) {
+    const msg = { nickname, message, timestamp };
     // Save to in memory data structure
     allTheMessages.push(msg);
-    // console.log("In-memory store of messages: ", allTheMessages);
+    // Broadcast to the clients
     io.emit("chat message", msg);
-  });
+  }
 });
 
 http.listen(port, function() {
