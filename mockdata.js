@@ -53,8 +53,6 @@ const col1 = [
   "yeasty"
 ];
 
-console.log(col1);
-
 const col2 = [
   "base-court",
   "bat-fowling",
