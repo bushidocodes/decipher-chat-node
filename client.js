@@ -14,9 +14,15 @@ $(function() {
   });
   socket.on("chat message", function(msg) {
     $("#messages").append(
-      $("<li>").text(`${msg.nickname} ${msg.message} ${msg.timestamp}`)
+      $("<li>").text(`${msg.socketid} ${msg.message} ${msg.timestamp}`)
     );
     console.log("msg", msg);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+  socket.on("new user", function(socketid) {
+    $("#messages").append(
+      $("<li>").text(`A new user ${socketid} has joined the chat`)
+    );
     window.scrollTo(0, document.body.scrollHeight);
   });
 });
