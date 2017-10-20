@@ -10,6 +10,9 @@ app.get("/", function(req, res) {
 // io.emit broadcasts to all including sender
 io.on("connection", function(socket) {
   socket.on("chat message", function(msg) {
+    // Add timestamp
+    msg.timestamp = JSON.stringify(Date.now());
+    console.log("What does this message look like: ", msg);
     io.emit("chat message", msg);
   });
 });
